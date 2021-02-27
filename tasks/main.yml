@@ -5,6 +5,5 @@
   zypper:
     name: 'patterns-containers-kubeadm'
     state: 'present'
-    type: 'pattern'
     disable_recommends: 'true'
   when: 'ansible_distribution == "openSUSE Leap" and ansible_distribution_major_version | int == 15'
