@@ -7,12 +7,6 @@
     state: 'present'
     disable_recommends: 'true'
 
-- name: 'Start and enable the crio.service'
-  service:
-    name: 'crio.service'
-    state: 'started'
-    enabled: 'true'
-
 - name: 'Enable the kubelet.service'
   service:
     name: 'kubelet.service'
