@@ -1,0 +1,19 @@
+galaxy_info:
+  role_name: 'install_kubeadm'
+  author: 'Johannes Kastl'
+  description: 'Install kubeadm and other things like kubelet, etc.'
+  company: 'B1 Systems GmbH'
+
+  license: 'BSD-3-Clause'
+
+  min_ansible_version: 2.4
+
+  platforms:
+  - name: opensuse
+    versions:
+    - 15.1
+    - 15.2
+
+  galaxy_tags: []
+
+dependencies: []
