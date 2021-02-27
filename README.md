@@ -3,7 +3,7 @@
 install_kubeadm
 =========
 
-YYY
+Install kubeadm and other things like kubelet, etc.
 
 Requirements
 ------------
