@@ -12,3 +12,8 @@
     name: 'crio.service'
     state: 'started'
     enabled: 'true'
+
+- name: 'Enable the kubelet.service'
+  service:
+    name: 'kubelet.service'
+    enabled: 'true'
