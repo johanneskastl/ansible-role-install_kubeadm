@@ -1,0 +1,8 @@
+---
+# install_kubeadm/tasks/main.yml
+
+- name: 'Install patterns-containers-kubeadm on openSUSE 15.x'
+  zypper:
+    name: 'patterns-containers-kubeadm'
+    state: 'present'
+    disable_recommends: 'true'

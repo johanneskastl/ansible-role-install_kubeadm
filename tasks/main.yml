@@ -1,9 +1,6 @@
 ---
 # install_kubeadm/tasks/main.yml
 
-- name: 'Install patterns-containers-kubeadm on openSUSE 15.x'
-  zypper:
-    name: 'patterns-containers-kubeadm'
-    state: 'present'
-    disable_recommends: 'true'
+- name: "openSUSE Leap 15.x"
+  include_tasks: openSUSE_Leap.yml
   when: 'ansible_distribution == "openSUSE Leap" and ansible_distribution_major_version | int == 15'
