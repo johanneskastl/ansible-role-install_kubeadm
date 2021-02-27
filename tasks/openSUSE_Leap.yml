@@ -25,3 +25,17 @@
     sysctl_file: '/etc/sysctl.d/net.ipv4.ip_forward.conf'
     sysctl_set: 'yes'
     reload: 'no'
+
+- name: 'Load the br_netfilter module'
+  modprobe:
+    name: 'br_netfilter'
+    state: 'present'
+
+- name: 'Create /etc/modules-load.d/br_netfilter.conf'
+  copy:
+    content: |
+      br_netfilter
+    dest: '/etc/modules-load.d/br_netfilter.conf'
+    owner: '0'
+    group: '0'
+    mode: '0644'
