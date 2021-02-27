@@ -17,3 +17,11 @@
   service:
     name: 'kubelet.service'
     enabled: 'true'
+
+- name: 'Create file /etc/sysctl.d/net.ipv4.ip_forward.conf'
+  sysctl:
+    name: 'net.ipv4.ip_forward'
+    value: '1'
+    sysctl_file: '/etc/sysctl.d/net.ipv4.ip_forward.conf'
+    sysctl_set: 'yes'
+    reload: 'no'
