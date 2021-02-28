@@ -1,0 +1,30 @@
+---
+# install_kubeadm/tasks/Ubuntu_20.04_runtime_crio.yml
+
+#
+# Install crio
+#
+
+- name: 'Add apt-key for crio-repository devel:kubic:libcontainers:stable'
+  ansible.builtin.apt_key:
+    url: 'https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_20.04/Release.key'
+    state: 'present'
+
+- name: 'Add download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable repository'
+  ansible.builtin.apt_repository:
+    repo: 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /'
+    state: 'present'
+    filename: 'devel_kubic_libcontainers_stable'
+
+- name: 'Install crio packages'
+  package:
+    name: 
+      - cri-o-1.17
+    state: 'present'
+  ignore_errors: '{{ ansible_check_mode }}'
+
+- name: 'Start and enable the crio service'
+  service:
+    name: 'crio.service'
+    state: 'started'
+    enabled: 'true'
