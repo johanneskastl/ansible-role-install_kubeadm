@@ -1,0 +1,98 @@
+---
+# install_kubeadm/tasks/Ubuntu_20.04.yml
+
+#
+# kernel modules and sysctl settings
+#
+
+- name: 'Create file /etc/sysctl.d/net.ipv4.ip_forward.conf'
+  sysctl:
+    name: 'net.ipv4.ip_forward'
+    value: '1'
+    sysctl_file: '/etc/sysctl.d/net.ipv4.ip_forward.conf'
+    sysctl_set: 'yes'
+    reload: 'no'
+
+- name: 'Load the br_netfilter module'
+  modprobe:
+    name: 'br_netfilter'
+    state: 'present'
+
+- name: 'Load the overlay module'
+  modprobe:
+    name: 'overlay'
+    state: 'present'
+
+- name: 'Create file /etc/sysctl.d/net.bridge.bridge-nf-call-iptables.conf'
+  sysctl:
+    name: 'net.bridge.bridge-nf-call-iptables'
+    value: '1'
+    sysctl_file: '/etc/sysctl.d/net.bridge.bridge-nf-call-iptables.conf'
+    sysctl_set: 'yes'
+    reload: 'no'
+
+- name: 'Create file /etc/sysctl.d/net.bridge.bridge-nf-call-ip6tables.conf'
+  sysctl:
+    name: 'net.bridge.bridge-nf-call-ip6tables'
+    value: '1'
+    sysctl_file: '/etc/sysctl.d/net.bridge.bridge-nf-call-ip6tables.conf'
+    sysctl_set: 'yes'
+    reload: 'no'
+
+- name: 'Create /etc/modules-load.d/kubeadm.conf'
+  copy:
+    content: |
+      br_netfilter
+      overlay
+    dest: '/etc/modules-load.d/kubeadm.conf'
+    owner: '0'
+    group: '0'
+    mode: '0644'
+
+#
+# Install packages for kubeadm, kubelet & Co
+#
+
+- name: 'Add apt-key for packages.cloud.google.com repository'
+  ansible.builtin.apt_key:
+    url: 'https://packages.cloud.google.com/apt/doc/apt-key.gpg'
+    state: 'present'
+
+- name: 'Add packages.cloud.google.com repository'
+  ansible.builtin.apt_repository:
+    repo: 'deb https://apt.kubernetes.io/ kubernetes-xenial main'
+    state: 'present'
+    filename: 'packages.cloud.google.com'
+
+- name: 'Install packages kubelet, kubeadm, kubectl and others'
+  package:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+      - wget
+      - curl
+    state: 'present'
+  ignore_errors: '{{ ansible_check_mode }}'
+
+# MISSING:
+# sudo apt-mark hold kubelet kubeadm kubectl
+#
+
+- name: 'Enable the kubelet.service'
+  service:
+    name: 'kubelet.service'
+    enabled: 'true'
+
+#
+# Container runtime
+#
+
+- include_tasks: Ubuntu_20.04_runtime_docker.yml
+  when: 'desired_container_runtime_ubuntu2004 == "docker"'
+
+- include_tasks: Ubuntu_20.04_runtime_crio.yml
+  when: 'desired_container_runtime_ubuntu2004 == "crio"'
+
+- include_tasks: Ubuntu_20.04_runtime_containerd.yml
+  when: 'desired_container_runtime_ubuntu2004 == "containerd"'
