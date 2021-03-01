@@ -24,6 +24,16 @@
       - docker-ce-cli
     state: 'present'
   ignore_errors: '{{ ansible_check_mode }}'
+  notify:
+    - 'Reboot'
+
+- name: 'Create directory /etc/systemd/system/docker.service.d'
+  ansible.builtin.file:
+    path: '/etc/systemd/system/docker.service.d'
+    state: 'directory'
+    mode: '0755'
+  notify:
+    - 'Reboot'
 
 - name: 'Create /etc/docker/daemon.json'
   copy:
@@ -40,9 +50,13 @@
     owner: '0'
     group: '0'
     mode: '0644'
+  notify:
+    - 'Reboot'
 
 - name: 'Start and enable the docker service'
   service:
     name: 'docker.service'
     state: 'started'
     enabled: 'true'
+  notify:
+    - 'Reboot'
