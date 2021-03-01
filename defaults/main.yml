@@ -1,0 +1,4 @@
+---
+# install_kubeadm/defaults/main.yml
+
+desired_container_runtime_ubuntu2004: 'docker'

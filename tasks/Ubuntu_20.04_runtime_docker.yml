@@ -1,0 +1,48 @@
+---
+# install_kubeadm/tasks/Ubuntu_20.04_runtime_docker.yml
+
+#
+# Install docker
+#
+
+- name: 'Add apt-key for download.docker.com'
+  ansible.builtin.apt_key:
+    url: 'https://download.docker.com/linux/ubuntu/gpg'
+    state: 'present'
+
+- name: 'Add download.docker.com repository'
+  ansible.builtin.apt_repository:
+    repo: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable'
+    state: 'present'
+    filename: 'download.docker.com'
+
+- name: 'Install packages'
+  package:
+    name: 
+      - containerd.io
+      - docker-ce
+      - docker-ce-cli
+    state: 'present'
+  ignore_errors: '{{ ansible_check_mode }}'
+
+- name: 'Create /etc/docker/daemon.json'
+  copy:
+    content: |
+      {
+        "exec-opts": ["native.cgroupdriver=systemd"],
+        "log-driver": "json-file",
+        "log-opts": {
+          "max-size": "100m"
+        },
+        "storage-driver": "overlay2"
+      }
+    dest: '/etc/docker/daemon.json'
+    owner: '0'
+    group: '0'
+    mode: '0644'
+
+- name: 'Start and enable the docker service'
+  service:
+    name: 'docker.service'
+    state: 'started'
+    enabled: 'true'

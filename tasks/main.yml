@@ -4,3 +4,7 @@
 - name: "openSUSE Leap 15.x"
   include_tasks: openSUSE_Leap.yml
   when: 'ansible_distribution == "openSUSE Leap" and ansible_distribution_major_version | int == 15'
+
+- name: "Ubuntu 20.04"
+  include_tasks: Ubuntu_20.04.yml
+  when: 'ansible_distribution == "Ubuntu" and ansible_distribution_version == "20.04"'
