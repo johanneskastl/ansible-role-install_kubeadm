@@ -22,7 +22,9 @@
     name:
       - kubernetes1.20-kubeadm
       - kubernetes1.20-kubelet
+      - kuberlr
       - cri-o
+      - cri-tools
     state: 'present'
     disable_recommends: 'true'
 
