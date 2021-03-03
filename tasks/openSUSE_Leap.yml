@@ -32,3 +32,9 @@
   service:
     name: 'kubelet.service'
     enabled: 'true'
+
+- name: 'Disable the docker.service'
+  service:
+    name: 'docker.service'
+    state: 'stopped'
+    enabled: 'false'
