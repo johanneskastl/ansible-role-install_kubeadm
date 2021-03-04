@@ -28,13 +28,12 @@
     state: 'present'
     disable_recommends: 'true'
 
+- name: 'Uninstall docker'
+  package:
+    name: 'docker'
+    state: 'absent'
+
 - name: 'Enable the kubelet.service'
   service:
     name: 'kubelet.service'
     enabled: 'true'
-
-- name: 'Disable the docker.service'
-  service:
-    name: 'docker.service'
-    state: 'stopped'
-    enabled: 'false'
