@@ -1,11 +1,37 @@
 ---
 # install_kubeadm/tasks/main.yml
 
-- name: 'Install patterns-containers-kubeadm on openSUSE 15.x'
+- name: 'Add devel:kubic repository to get a new (and working) version of kubeadm etc.'
+  zypper_repository:
+    name: 'devel:kubic'
+    repo: "https://download.opensuse.org/repositories/devel:/kubic/openSUSE_Leap_{{ ansible_distribution_version }}/"
+    state: 'present'
+    runrefresh: 'yes'
+    auto_import_keys: 'yes'
+
+- name: 'Add repository to get a new (and working) version of kubeadm etc.'
+  zypper_repository:
+    name: 'home:ojkastl_buildservice:Kubernetes_for_Leap'
+    repo: "https://download.opensuse.org/repositories/home:/ojkastl_buildservice:/Kubernetes_for_Leap/openSUSE_Leap_{{ ansible_distribution_version }}/"
+    state: 'present'
+    runrefresh: 'yes'
+    auto_import_keys: 'yes'
+
+- name: 'Install  on openSUSE 15.x'
   zypper:
-    name: 'patterns-containers-kubeadm'
+    name:
+      - kubernetes1.20-kubeadm
+      - kubernetes1.20-kubelet
+      - kuberlr
+      - cri-o
+      - cri-tools
     state: 'present'
     disable_recommends: 'true'
+
+- name: 'Uninstall docker'
+  package:
+    name: 'docker'
+    state: 'absent'
 
 - name: 'Enable the kubelet.service'
   service:
