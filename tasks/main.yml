@@ -1,6 +1,10 @@
 ---
 # install_kubeadm/tasks/main.yml
 
+- name: "CentOS 7"
+  include_tasks: CentOS_7.yml
+  when: 'ansible_distribution == "CentOS" and ansible_distribution_major_version | int == 7'
+
 - name: "openSUSE Leap 15.x"
   include_tasks: openSUSE_Leap.yml
   when: 'ansible_distribution == "openSUSE Leap" and ansible_distribution_major_version | int == 15'
