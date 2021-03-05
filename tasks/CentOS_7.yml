@@ -1,0 +1,96 @@
+---
+# install_kubeadm/tasks/CentOS_7.yml
+
+#
+# kernel modules and sysctl settings
+#
+
+- name: 'Create file /etc/sysctl.d/net.ipv4.ip_forward.conf'
+  sysctl:
+    name: 'net.ipv4.ip_forward'
+    value: '1'
+    sysctl_file: '/etc/sysctl.d/net.ipv4.ip_forward.conf'
+    sysctl_set: 'yes'
+    reload: 'no'
+
+- name: 'Load the br_netfilter module'
+  modprobe:
+    name: 'br_netfilter'
+    state: 'present'
+
+- name: 'Load the overlay module'
+  modprobe:
+    name: 'overlay'
+    state: 'present'
+
+- name: 'Create file /etc/sysctl.d/net.bridge.bridge-nf-call-iptables.conf'
+  sysctl:
+    name: 'net.bridge.bridge-nf-call-iptables'
+    value: '1'
+    sysctl_file: '/etc/sysctl.d/net.bridge.bridge-nf-call-iptables.conf'
+    sysctl_set: 'yes'
+    reload: 'no'
+
+- name: 'Create file /etc/sysctl.d/net.bridge.bridge-nf-call-ip6tables.conf'
+  sysctl:
+    name: 'net.bridge.bridge-nf-call-ip6tables'
+    value: '1'
+    sysctl_file: '/etc/sysctl.d/net.bridge.bridge-nf-call-ip6tables.conf'
+    sysctl_set: 'yes'
+    reload: 'no'
+
+- name: 'Create /etc/modules-load.d/kubeadm.conf'
+  copy:
+    content: |
+      br_netfilter
+      overlay
+    dest: '/etc/modules-load.d/kubeadm.conf'
+    owner: '0'
+    group: '0'
+    mode: '0644'
+
+#
+# Disable selinux
+#
+- name: 'Disable selinux'
+  ansible.builtin.lineinfile:
+    path: '/etc/selinux/config'
+    regexp: '^SELINUX='
+    line: 'SELINUX=disabled'
+  notify:
+    - 'Reboot'
+    - 'Wait for the machine(s) to be ready again'
+
+#
+# Install packages for kubeadm, kubelet & Co
+#
+
+- name: 'Add packages.cloud.google.com repository'
+  ansible.builtin.yum_repository:
+    name: 'packages.cloud.google.com'
+    description: 'packages.cloud.google.com'
+    file: 'packages.cloud.google.com'
+    baseurl: 'https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64'
+    gpgkey: 'https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg'
+    state: 'present'
+
+- name: 'Install packages kubelet, kubeadm, kubectl and others'
+  package:
+    name:
+      - kubeadm
+      - docker
+      - wget
+      - curl
+    state: 'present'
+  ignore_errors: '{{ ansible_check_mode }}'
+
+- name: 'Enable the kubelet.service'
+  service:
+    name: 'kubelet.service'
+    enabled: 'true'
+
+- name: 'Enable the docker.service'
+  service:
+    name: 'docker.service'
+    state: 'started'
+    enabled: 'true'
