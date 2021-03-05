@@ -5,6 +5,10 @@
   include_tasks: CentOS_7.yml
   when: 'ansible_distribution == "CentOS" and ansible_distribution_major_version | int == 7'
 
+- name: "Debian 10"
+  include_tasks: Debian_10.yml
+  when: 'ansible_distribution == "Debian" and ansible_distribution_version == "10"'
+
 - name: "openSUSE Leap 15.x"
   include_tasks: openSUSE_Leap.yml
   when: 'ansible_distribution == "openSUSE Leap" and ansible_distribution_major_version | int == 15'
@@ -12,7 +16,3 @@
 - name: "Ubuntu 20.04"
   include_tasks: Ubuntu_20.04.yml
   when: 'ansible_distribution == "Ubuntu" and ansible_distribution_version == "20.04"'
-
-- name: "Debian 10"
-  include_tasks: Debian_10.yml
-  when: 'ansible_distribution == "Debian" and ansible_distribution_version == "10"'
