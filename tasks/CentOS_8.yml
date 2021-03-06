@@ -114,6 +114,15 @@
       - docker-ce
     state: 'present'
   ignore_errors: '{{ ansible_check_mode }}'
+
+- name: 'Create /etc/docker/'
+  file:
+    path: '/etc/docker/'
+    state: 'directory'
+    owner: '0'
+    group: '0'
+    mode: '0755'
+
 - name: 'Create /etc/docker/daemon.json'
   copy:
     content: |
