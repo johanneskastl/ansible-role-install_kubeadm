@@ -26,6 +26,7 @@
   ignore_errors: '{{ ansible_check_mode }}'
   notify:
     - 'Reboot'
+    - 'Wait for the machine(s) to be ready again'
 
 - name: 'Create directory /etc/systemd/system/docker.service.d'
   ansible.builtin.file:
@@ -34,6 +35,7 @@
     mode: '0755'
   notify:
     - 'Reboot'
+    - 'Wait for the machine(s) to be ready again'
 
 - name: 'Create /etc/docker/daemon.json'
   copy:
@@ -52,6 +54,7 @@
     mode: '0644'
   notify:
     - 'Reboot'
+    - 'Wait for the machine(s) to be ready again'
 
 - name: 'Start and enable the docker service'
   service:
@@ -60,3 +63,4 @@
     enabled: 'true'
   notify:
     - 'Reboot'
+    - 'Wait for the machine(s) to be ready again'
