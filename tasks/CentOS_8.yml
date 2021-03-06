@@ -99,6 +99,21 @@
     state: 'absent'
     autoremove: 'yes'
 
+- name: 'Add download.docker.com repository'
+  ansible.builtin.yum_repository:
+    name: 'download.docker.com'
+    description: 'download.docker.com'
+    file: 'download.docker.com'
+    baseurl: 'https://download.docker.com/linux/centos/$releasever/$basearch/stable'
+    gpgkey: 'https://download.docker.com/linux/centos/gpg'
+    state: 'present'
+
+- name: 'Install docker-ce'
+  package:
+    name:
+      - docker-ce
+    state: 'present'
+  ignore_errors: '{{ ansible_check_mode }}'
 - name: 'Create /etc/docker/daemon.json'
   copy:
     content: |
@@ -117,22 +132,6 @@
   notify:
     - 'Reboot'
     - 'Wait for the machine(s) to be ready again'
-
-- name: 'Add download.docker.com repository'
-  ansible.builtin.yum_repository:
-    name: 'download.docker.com'
-    description: 'download.docker.com'
-    file: 'download.docker.com'
-    baseurl: 'https://download.docker.com/linux/centos/$releasever/$basearch/stable'
-    gpgkey: 'https://download.docker.com/linux/centos/gpg'
-    state: 'present'
-
-- name: 'Install docker-ce'
-  package:
-    name:
-      - docker-ce
-    state: 'present'
-  ignore_errors: '{{ ansible_check_mode }}'
 
 - name: 'Enable the docker.service'
   service:
