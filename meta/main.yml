@@ -1,5 +1,6 @@
 galaxy_info:
   role_name: 'install_kubeadm'
+  namespace: 'johanneskastl'
   author: 'Johannes Kastl'
   description: 'Install kubeadm and other things like kubelet, etc.'
   company: 'B1 Systems GmbH'
