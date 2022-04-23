@@ -2,4 +2,4 @@
 # install_kubeadm/defaults/main.yml
 
 desired_container_runtime_ubuntu2004: 'docker'
-desired_container_runtime_Debian10: 'docker'
+desired_container_runtime_debian10: 'docker'
