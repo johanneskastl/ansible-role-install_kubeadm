@@ -94,5 +94,5 @@
 - include_tasks: Ubuntu_20.04_runtime_crio.yml
   when: 'desired_container_runtime_ubuntu2004 == "crio"'
 
-- include_tasks: Ubuntu_20.04_runtime_containerd.yml
-  when: 'desired_container_runtime_ubuntu2004 == "containerd"'
+### - include_tasks: Ubuntu_20.04_runtime_containerd.yml
+###   when: 'desired_container_runtime_ubuntu2004 == "containerd"'
