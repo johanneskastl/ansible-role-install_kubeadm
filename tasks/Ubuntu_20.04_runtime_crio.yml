@@ -18,7 +18,7 @@
 
 - name: 'Install crio packages'
   package:
-    name: 
+    name:
       - cri-o-1.17
     state: 'present'
   ignore_errors: '{{ ansible_check_mode }}'
