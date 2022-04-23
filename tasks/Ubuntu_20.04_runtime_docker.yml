@@ -18,7 +18,7 @@
 
 - name: 'Install packages'
   package:
-    name: 
+    name:
       - containerd.io
       - docker-ce
       - docker-ce-cli
